@@ -95,7 +95,7 @@ export const eventDescriptions = [
   "Satisfy your cravings at our Beer and BBQ Festival. Indulge in mouthwatering barbecue dishes, sample craft beers, and enjoy live music and entertainment.",
   "Plan your dream wedding at our Wedding Expo Extravaganza. Discover bridal trends, meet wedding vendors, and turn your wedding dreams into reality.",
   "Jam out under the stars at our Outdoor Music Jam Session. Enjoy live music performances, sing along to your favorite tunes, and dance the night away.",
-  "Experience the magic of cinema at our International Film Festival Experience. Watch award-winning films, meet filmmakers, and immerse yourself in the world of cinema."
+  "Experience the magic of cinema at our International Film Festival Experience. Watch award-winning films, meet filmmakers, and immerse yourself in the world of cinema.",
 ];
 export const locations: string[] = [
   "The Plaza Hotel, New York City, USA",
@@ -145,7 +145,7 @@ export const locations: string[] = [
   "Suntec Singapore International Convention and Exhibition Centre, Singapore",
   "Rome Convention Center, Rome, Italy",
   "International Convention Centre, Durban, South Africa",
-  "Estrel Berlin, Berlin, Germany"
+  "Estrel Berlin, Berlin, Germany",
 ];
 export const ticketTypes: string[] = [
   "VIP",
@@ -188,22 +188,20 @@ export const descriptions: { [key: string]: string } = {
   "Group Pass": "Special rates for groups attending the event together.",
   "Senior Pass": "Discounted tickets for seniors aged 65 and above.",
   "Weekend Pass": "Access to the event for the entire weekend.",
-  "Child Pass": "Tickets for children under a certain age, usually accompanied by an adult.",
+  "Child Pass":
+    "Tickets for children under a certain age, usually accompanied by an adult.",
   "Day Pass": "Access to the event for a single day.",
   "Premium Pass": "Enhanced access with additional perks and privileges.",
-  "Corporate Pass": "Tickets purchased by companies for their employees or clients.",
-  "Artist Pass": "Access granted to artists participating or performing at the event.",
+  "Corporate Pass":
+    "Tickets purchased by companies for their employees or clients.",
+  "Artist Pass":
+    "Access granted to artists participating or performing at the event.",
   "Volunteer Pass": "Tickets provided to volunteers helping with the event.",
 };
 export const questions: QuestionInfo[] = [
-  { question: "First Name", required: true },
-  { question: "Last Name", required: true },
-  { question: "How did you find out about this event?", required: true },
-  {
-    question: "How many events have you attended in the past year?",
-    required: false,
-  },
-  { question: "How many people are in your company?", required: false },
+  { question: "Email address", required: true },
+  { question: "Full Name", required: true },
+  { question: "How many years have you attended Eth Denver?", required: false },
 ];
 export const artworkUrls: string[] = [
   "bafkreifuuae4uzclz5futlfqrq43aqk6peb26er6dz7nhrserr6f7zqrqy",

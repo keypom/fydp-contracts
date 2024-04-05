@@ -36,23 +36,25 @@ const main = async () => {
 
   let keypomContractId = `1710351544642-kp-ticketing.testnet`;
   let marketplaceContractId = `1710351544642-marketplace.testnet`;
+  let factoryContractId = `1710351544642-factory.testnet`;
   if (createAccounts) {
     keypomContractId = `${Date.now().toString()}-kp-ticketing.testnet`;
     marketplaceContractId = `${Date.now().toString()}-marketplace.testnet`;
+    factoryContractId = `${Date.now().toString()}-factory.testnet`;
     await createContracts({
       signerAccount,
       near,
       marketplaceContractId,
       keypomContractId,
+      factoryContractId,
     });
   }
 
   const marketAccount = await near.account(marketplaceContractId);
-  const keypomAccount = await near.account(keypomContractId);
 
   //  Create Events (and generate keypair if necessary / update user metadata)
   // To store: public key, encrypted private key, iv, salt
-  const events = generateEvents(20);
+  const events = generateEvents(1);
   let nonce = 0;
   const funderInfo = await signerAccount.viewFunction(
     keypomContractId,
@@ -99,7 +101,9 @@ const main = async () => {
       let totalExcessBytes = 0;
       for (const ticket of event.tickets) {
         nonce += 1;
-        const dropId = `${Date.now().toString()}-${ticket.name}-${nonce}`;
+        const dropId = `${Date.now().toString()}-${ticket.name
+          .replaceAll(" ", "")
+          .toLocaleLowerCase()}-${nonce.toString()}`;
 
         ticket_information[`${dropId}`] = {
           max_tickets: ticket.maxSupply,
@@ -139,12 +143,15 @@ const main = async () => {
           transfer_key_allowlist: [marketplaceContractId],
         };
 
-        const assetData = [
+        let assetData = [
+          { uses: 1, assets: [null], config: { permissions: "claim" } },
           {
-            uses: 2,
+            uses: 1,
             assets: [null],
             config: {
-              permissions: "claim",
+              permissions: "create_account_and_claim",
+              account_creation_keypom_args: { drop_id_field: "drop_id" },
+              root_account_id: factoryContractId,
             },
           },
         ];
@@ -226,7 +233,10 @@ const main = async () => {
     console.log(`Drop ID: ${dropId}`);
     for (const secretKey of allKeyData[dropId]) {
       console.log(
-        `http://localhost:3000/tickets/ticket/${dropId}#secretKey=${secretKey}`,
+        `http://localhost:3000/tickets/ticket/${dropId}#${secretKey.replace(
+          "ed25519:",
+          "",
+        )}`,
       );
     }
   }

@@ -67,6 +67,7 @@ export interface ZombieDropMetadata {
   salesValidThrough: DateAndTimeInfo;
   passValidThrough: DateAndTimeInfo;
   price: string;
+  priceUSD?: string;
   artwork: string;
   maxSupply?: number;
 }

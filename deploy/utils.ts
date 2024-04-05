@@ -91,11 +91,13 @@ export async function createContracts({
   near,
   marketplaceContractId,
   keypomContractId,
+  factoryContractId,
 }: {
   signerAccount: any;
   near: any;
   marketplaceContractId: string;
   keypomContractId: string;
+  factoryContractId: string;
 }) {
   const keyPair = KeyPair.fromRandom("ed25519");
   const publicKey = keyPair.publicKey.toString();
@@ -128,6 +130,22 @@ export async function createContracts({
       keypom_contract: keypomContractId,
       owner_id: "minqi.testnet",
       v2_keypom_contract: "v2.keypom.testnet",
+    },
+    deposit: "0",
+    gas: "300000000000000",
+  });
+
+  await createAccountDeployContract({
+    signerAccount,
+    newAccountId: factoryContractId,
+    amount: "200",
+    near,
+    wasmPath: "./out/factory.wasm",
+    methodName: "new",
+    args: {
+      starting_near_balance: utils.format.parseNearAmount("1"),
+      starting_ncon_balance: utils.format.parseNearAmount("50"),
+      keypom_contract: keypomContractId,
     },
     deposit: "0",
     gas: "300000000000000",
@@ -200,113 +218,128 @@ export async function createAccount({
 }
 
 export function generateEvents(numEvents = 40) {
-  // Assume necessary context (like eventThemes, locations, etc.) is defined elsewhere
-
-  function randomDate(start: Date, end: Date): Date {
-    return new Date(
-      start.getTime() + Math.random() * (end.getTime() - start.getTime()),
-    );
-  }
-
-  function formatDateToEpoch(date: Date): number {
-    return date.getTime();
-  }
-
-  function formatTime(date: Date): string {
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? 0 + minutes : minutes;
-    let strTime = hours + ":" + minutes + " " + ampm;
-    return strTime;
-  }
-
   function generateDateInfo(): DateAndTimeInfo {
-    const startDate = new Date(2023, 0, 1);
-    const endDate = new Date(2024, 11, 31);
-    const start = randomDate(startDate, endDate);
+    const startDate = new Date(2025, 2, 23);
+    const endDate = new Date(2025, 3, 3);
 
-    if (Math.random() > 0.5) {
-      // Single day event
-      return {
-        startDate: formatDateToEpoch(start),
-        startTime: formatTime(start), // Optional
-      };
-    } else {
-      // Multi-day event
-      const end = new Date(
-        start.getTime() + Math.random() * (endDate.getTime() - start.getTime()),
-      );
-      end.setDate(end.getDate() + Math.floor(Math.random() * 4) + 1); // 1 to 5 days duration
-      return {
-        startDate: formatDateToEpoch(start),
-        startTime: formatTime(start), // Optional
-        endDate: formatDateToEpoch(end),
-        endTime: formatTime(end), // Optional
-      };
-    }
-  }
-
-  function generateQuestions() {
-    if (Math.random() > 0) {
-      // Single day event
-      return questions.slice(0, 5);
-    } else {
-      return undefined;
-    }
+    return {
+      startDate: startDate.getTime(),
+      endDate: endDate.getTime(),
+    };
   }
 
   let events: ZombieReturnedEvent[] = [];
   for (let i = 0; i < numEvents; i++) {
-    const themeIndex = Math.floor(
-      Math.random() *
-        (eventNames.length <= eventDescriptions.length
-          ? eventNames.length
-          : eventDescriptions.length),
-    );
-
-    const eventName = `${eventNames[themeIndex]}`;
+    const eventName = `Eth Denver 2025`;
     const eventId = crypto.randomUUID().toString();
     const eventInfo = {
       name: eventName,
       dateCreated: Date.now().toString(),
       id: eventId,
-      description: `${eventDescriptions[themeIndex]}`,
-      location: `${locations[Math.floor(Math.random() * locations.length)]}`,
-      date: generateDateInfo(),
-      artwork: artworkUrls[Math.floor(Math.random() * artworkUrls.length)],
-      questions: generateQuestions(),
+      description: `ETHDenver celebrates the convergence of blockchain, culture, and education. Located in the heart of Denver, Colorado, ETHDenver is the premiere destination for #BUIDLing the decentralized future..`,
+      location: `4655 Humboldt St, Denver CO 80216`,
+      date: {
+        startDate: new Date(2025, 2, 23).getTime(),
+        endDate: new Date(2025, 3, 3).getTime(),
+      },
+      artwork: "bafybeibadywqnworqo5azj4rume54j5wuqgphljds7haxdf2kc45ytewpy",
+      qrPage: {
+        showTitle: false,
+        showLocation: false,
+        showDate: false,
+        dateUnderQR: true,
+        title: {
+          color: "white",
+          fontFamily: "denverHeading",
+          fontSize: { base: "6xl", md: "8xl" },
+        },
+        content: {
+          helperText: {
+            fontFamily: "denverBody",
+            fontWeight: "400",
+            text: "Once inside, visit this page to start your journey",
+          },
+          sellButton: {
+            bg: "#FF65AF",
+            fontFamily: "denverBody",
+            fontSize: "2xl",
+            fontWeight: "500",
+            h: "48px",
+            sx: { _hover: { backgroundColor: "#FF65AF" } },
+            text: "SELL TICKET",
+          },
+          downloadButton: false,
+        },
+        background:
+          "bafybeibadywqnworqo5azj4rume54j5wuqgphljds7haxdf2kc45ytewpy",
+        boxIcon: {
+          image: "bafkreieuxeeutfk2ogrz4uu4mbajo2vvdzwrbdqlb7ofwwsynfeeocmtde",
+          bg: "#F8F8F9",
+          border: "#BE7BFB",
+        },
+        boxContent: {
+          border:
+            "linear-gradient(white, white) padding-box, linear-gradient(0deg, rgba(255,101, 175,1) 0%, rgba(132,74,255,0.27) 100%) border-box",
+        },
+      },
+      questions: questions,
       nearCheckout: true,
     };
 
     let tickets: ZombieDropMetadata[] = [];
-    const numTickets = Math.floor(Math.random() * 6) + 1;
-    for (let j = 0; j < numTickets; j++) {
-      const ticketType: string =
-        ticketTypes[Math.floor(Math.random() * ticketTypes.length)];
-      const ticketInfo = {
-        name: `${ticketType} Ticket`,
-        eventId,
-        description: descriptions[ticketType],
-        salesValidThrough: generateDateInfo(),
-        passValidThrough: generateDateInfo(),
-        price:
-          Math.random() > 0.5
-            ? `${utils.format.parseNearAmount(
-                (Math.floor(Math.random() * 150) + 1).toString(),
-              )}`
-            : "0", // $25 to $500
-        artwork:
-          ticketArtworkUrls[
-            Math.floor(Math.random() * ticketArtworkUrls.length)
-          ],
-        maxSupply: Math.floor(Math.random() * 50) + 1,
-        dateCreated: new Date().toISOString(),
-      };
-      tickets.push(ticketInfo);
-    }
+    tickets.push({
+      name: `Member GA`,
+      eventId,
+      description: `\-CHECKLIST\-Fourteen-day full event pass\-Access to applications to contribute\-Access to pre-event Discord\-Access to Official ETHDenver Parties\-SporkDAO Member Airdrops\-Earn $Spork by Contributing\-ETHDenver Swag + Discounts`,
+      salesValidThrough: {
+        startDate: Date.now(),
+        endDate: new Date(2025, 3, 3).getTime(),
+      },
+      passValidThrough: {
+        startDate: new Date(2025, 2, 23).getTime(),
+        endDate: new Date(2025, 3, 3).getTime(),
+      },
+      price: "0",
+      artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
+      maxSupply: 25000,
+      dateCreated: new Date().toISOString(),
+    });
+    tickets.push({
+      name: `Non Member GA`,
+      eventId,
+      description: `\-CHECKLIST\-Fourteen-day full event pass\-Access to applications to contribute\-Access to pre-event Discord\-Access to Official ETHDenver Parties\-ETHDenver Swag`,
+      salesValidThrough: {
+        startDate: Date.now(),
+        endDate: new Date(2025, 3, 3).getTime(),
+      },
+      passValidThrough: {
+        startDate: new Date(2025, 2, 23).getTime(),
+        endDate: new Date(2025, 3, 3).getTime(),
+      },
+      priceUSD: "599",
+      price: utils.format.parseNearAmount("100"),
+      artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
+      maxSupply: 25000,
+      dateCreated: new Date().toISOString(),
+    });
+    tickets.push({
+      name: `SporkWhale VIP`,
+      eventId,
+      description: `\-CHECKLIST\-Everything in GA and...\-VIP Entrance (shorter wait)\-SporkWhale VIP Loung w/ light snacks and beverages\-Front Row Seating at Stages\-Official Parties SporkWhale Viewing\-Requires NFT to Access Lounge`,
+      salesValidThrough: {
+        startDate: Date.now(),
+        endDate: new Date(2025, 3, 3).getTime(),
+      },
+      passValidThrough: {
+        startDate: new Date(2025, 2, 23).getTime(),
+        endDate: new Date(2025, 3, 3).getTime(),
+      },
+      priceUSD: "2500",
+      price: utils.format.parseNearAmount("415"),
+      artwork: "bafybeibmri2ezjt3y2hsvzygpytsq7cinxzelkksh33mksl5p37ryt44qe",
+      maxSupply: 25000,
+      dateCreated: new Date().toISOString(),
+    });
 
     events.push({
       eventMeta: eventInfo,
@@ -525,7 +558,7 @@ export const addTickets = async ({
   eventQuestions?: QuestionInfo[];
 }): Promise<string[]> => {
   const maxSupply = ticket.maxSupply || 100;
-  let numTickets = Math.floor(Math.random() * maxSupply) + 1;
+  let numTickets = 3;
   numTickets = Math.min(numTickets, maxSupply);
 
   let keyData: {
