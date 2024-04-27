@@ -4,6 +4,7 @@ import {
   eventDescriptions,
   eventNames,
   locations,
+  questionResponses,
   questions,
   ticketArtworkUrls,
   ticketTypes,
@@ -144,11 +145,12 @@ export async function createContracts({
     methodName: "new",
     args: {
       starting_near_balance: utils.format.parseNearAmount("1"),
-      starting_ncon_balance: utils.format.parseNearAmount("50"),
+      starting_ncon_balance: utils.format.parseNearAmount("250"),
       keypom_contract: keypomContractId,
     },
     deposit: "0",
     gas: "300000000000000",
+    createDrop: true,
   });
 }
 
@@ -162,6 +164,7 @@ export async function createAccountDeployContract({
   args,
   deposit = "0",
   gas = "300000000000000",
+  createDrop = false,
 }: {
   signerAccount: any;
   newAccountId: string;
@@ -172,6 +175,7 @@ export async function createAccountDeployContract({
   args: any;
   deposit?: string;
   gas?: string;
+  createDrop?: boolean;
 }) {
   console.log("Creating account: ", newAccountId);
   await createAccount({ signerAccount, newAccountId, amount });
@@ -186,6 +190,45 @@ export async function createAccountDeployContract({
     gas,
     wasmPath,
   });
+
+  if (createDrop) {
+    console.log("Creating drop: ", newAccountId);
+    await sendTransaction({
+      signerAccount: accountObj,
+      receiverId: newAccountId,
+      methodName: "create_drop",
+      args: {
+        drop_data: {
+          id: "illia_talk",
+          amount: utils.format.parseNearAmount("50"),
+          name: "Illia's Talk",
+          description: "Illia's talk on the Ethereum ecosystem",
+          image: "bafybeibmri2ezjt3y2hsvzygpytsq7cinxzelkksh33mksl5p37ryt44qe",
+        },
+      },
+      deposit: "0",
+      gas,
+    });
+
+    await sendTransaction({
+      signerAccount: accountObj,
+      receiverId: newAccountId,
+      methodName: "create_drop",
+      args: {
+        drop_data: {
+          id: "near_sponsor_scavenger_1",
+          scavenger_ids: ["foo", "bar"],
+          amount: utils.format.parseNearAmount("100"),
+          name: "NEAR Sponsor Scavenger Hunt",
+          description: "Find all the QRs and receive an NFT!",
+          image: "bafybeibmri2ezjt3y2hsvzygpytsq7cinxzelkksh33mksl5p37ryt44qe",
+        },
+      },
+      deposit: "0",
+      gas,
+    });
+  }
+
   console.log("Deployed.");
 }
 
@@ -254,6 +297,8 @@ export function generateEvents(numEvents = 40) {
           fontSize: { base: "6xl", md: "8xl" },
         },
         content: {
+          border:
+            "linear-gradient(white, white) padding-box, linear-gradient(0deg, rgba(255,101, 175,1) 0%, rgba(132,74,255,0.27) 100%) border-box",
           helperText: {
             fontFamily: "denverBody",
             fontWeight: "400",
@@ -265,6 +310,8 @@ export function generateEvents(numEvents = 40) {
             fontSize: "2xl",
             fontWeight: "500",
             h: "48px",
+            color: "white",
+            helperText: false,
             sx: { _hover: { backgroundColor: "#FF65AF" } },
             text: "SELL TICKET",
           },
@@ -277,51 +324,47 @@ export function generateEvents(numEvents = 40) {
           bg: "#F8F8F9",
           border: "#BE7BFB",
         },
-        boxContent: {
-          border:
-            "linear-gradient(white, white) padding-box, linear-gradient(0deg, rgba(255,101, 175,1) 0%, rgba(132,74,255,0.27) 100%) border-box",
-        },
       },
       questions: questions,
       nearCheckout: true,
     };
 
     let tickets: ZombieDropMetadata[] = [];
-    tickets.push({
-      name: `Member GA`,
-      eventId,
-      description: `\-CHECKLIST\-Fourteen-day full event pass\-Access to applications to contribute\-Access to pre-event Discord\-Access to Official ETHDenver Parties\-SporkDAO Member Airdrops\-Earn $Spork by Contributing\-ETHDenver Swag + Discounts`,
-      salesValidThrough: {
-        startDate: Date.now(),
-        endDate: new Date(2025, 3, 3).getTime(),
-      },
-      passValidThrough: {
-        startDate: new Date(2025, 2, 23).getTime(),
-        endDate: new Date(2025, 3, 3).getTime(),
-      },
-      price: "0",
-      artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
-      maxSupply: 25000,
-      dateCreated: new Date().toISOString(),
-    });
-    tickets.push({
-      name: `Non Member GA`,
-      eventId,
-      description: `\-CHECKLIST\-Fourteen-day full event pass\-Access to applications to contribute\-Access to pre-event Discord\-Access to Official ETHDenver Parties\-ETHDenver Swag`,
-      salesValidThrough: {
-        startDate: Date.now(),
-        endDate: new Date(2025, 3, 3).getTime(),
-      },
-      passValidThrough: {
-        startDate: new Date(2025, 2, 23).getTime(),
-        endDate: new Date(2025, 3, 3).getTime(),
-      },
-      priceUSD: "599",
-      price: utils.format.parseNearAmount("100"),
-      artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
-      maxSupply: 25000,
-      dateCreated: new Date().toISOString(),
-    });
+    // tickets.push({
+    //   name: `Member GA`,
+    //   eventId,
+    //   description: `\-CHECKLIST\-Fourteen-day full event pass\-Access to applications to contribute\-Access to pre-event Discord\-Access to Official ETHDenver Parties\-SporkDAO Member Airdrops\-Earn $Spork by Contributing\-ETHDenver Swag + Discounts`,
+    //   salesValidThrough: {
+    //     startDate: Date.now(),
+    //     endDate: new Date(2025, 3, 3).getTime(),
+    //   },
+    //   passValidThrough: {
+    //     startDate: Date.now(),
+    //     endDate: new Date(2025, 3, 3).getTime(),
+    //   },
+    //   price: "0",
+    //   artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
+    //   maxSupply: 25000,
+    //   dateCreated: new Date().toISOString(),
+    // });
+    // tickets.push({
+    //   name: `Non Member GA`,
+    //   eventId,
+    //   description: `\-CHECKLIST\-Fourteen-day full event pass\-Access to applications to contribute\-Access to pre-event Discord\-Access to Official ETHDenver Parties\-ETHDenver Swag`,
+    //   salesValidThrough: {
+    //     startDate: Date.now(),
+    //     endDate: new Date(2025, 3, 3).getTime(),
+    //   },
+    //   passValidThrough: {
+    //     startDate: Date.now(),
+    //     endDate: new Date(2025, 3, 3).getTime(),
+    //   },
+    //   priceUSD: "599",
+    //   price: utils.format.parseNearAmount("100"),
+    //   artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
+    //   maxSupply: 25000,
+    //   dateCreated: new Date().toISOString(),
+    // });
     tickets.push({
       name: `SporkWhale VIP`,
       eventId,
@@ -331,11 +374,11 @@ export function generateEvents(numEvents = 40) {
         endDate: new Date(2025, 3, 3).getTime(),
       },
       passValidThrough: {
-        startDate: new Date(2025, 2, 23).getTime(),
+        startDate: Date.now(),
         endDate: new Date(2025, 3, 3).getTime(),
       },
       priceUSD: "2500",
-      price: utils.format.parseNearAmount("415"),
+      price: utils.format.parseNearAmount("10"),
       artwork: "bafybeibmri2ezjt3y2hsvzygpytsq7cinxzelkksh33mksl5p37ryt44qe",
       maxSupply: 25000,
       dateCreated: new Date().toISOString(),
@@ -593,7 +636,12 @@ export const addTickets = async ({
     let answers: { [key: string]: string } = {};
     for (const question of questions) {
       if (question.required || Math.random() > 0.8) {
-        answers[question.question] = `${question.question}`;
+        const randomIndex = Math.floor(
+          Math.random() * questionResponses[question.question].length,
+        );
+        answers[question.question] = `${
+          questionResponses[question.question][randomIndex]
+        }`;
       }
     }
 

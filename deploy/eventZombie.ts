@@ -154,6 +154,7 @@ const main = async () => {
               root_account_id: factoryContractId,
             },
           },
+          { uses: 1, assets: [null], config: { permissions: "claim" } },
         ];
         drop_ids.push(dropId);
         asset_datas.push(assetData);

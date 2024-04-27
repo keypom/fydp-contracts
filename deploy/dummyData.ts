@@ -200,7 +200,8 @@ export const descriptions: { [key: string]: string } = {
 };
 export const questions: QuestionInfo[] = [
   { question: "Email address", required: true },
-  { question: "Full Name", required: true },
+  { question: "First Name", required: true },
+  { question: "Last Name", required: true },
   { question: "How many years have you attended Eth Denver?", required: false },
 ];
 export const artworkUrls: string[] = [
@@ -283,3 +284,15 @@ export const ticketArtworkUrls: string[] = [
   "bafkreif64tonprq2dimk775ddbfg64qqcgjm7jljn65qo5mvtzt65i2xk4",
   "bafybeihj6kqj2rnieu6d5aluywdcnsg44oxik6sc3ng3fz3n5h22o4nx6a",
 ];
+
+export const questionResponses: Record<string, Array<string>> = {
+  "Email address": [
+    "bvI1A@example.com",
+    "aQqFP@example.com",
+    "2Qp2y@example.com",
+    "S0Ck8@example.com",
+  ],
+  "First Name": ["Ben", "John", "Alice", "Emily"],
+  "Last Name": ["Kurrek", "Smith", "Lu", "Li", "Hamill"],
+  "How many years have you attended Eth Denver?": ["1", "2", "3", "4"],
+};
