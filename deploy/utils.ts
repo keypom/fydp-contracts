@@ -192,37 +192,52 @@ export async function createAccountDeployContract({
   });
 
   if (createDrop) {
+    let drops = [
+      {
+        id: "illia_talk",
+        amount: utils.format.parseNearAmount("50"),
+        name: "Illia's Talk",
+        image: "bafkreiblvfmo7r4zawd5c45qudwhik3ycdqdnpikbrysp5xdrrvq4a7mli",
+      },
+      {
+        id: "near_sponsor_scavenger_1",
+        scavenger_ids: ["foo", "bar"],
+        amount: utils.format.parseNearAmount("100"),
+        name: "NEAR Sponsor Scavenger Hunt",
+        image: "bafkreiblvfmo7r4zawd5c45qudwhik3ycdqdnpikbrysp5xdrrvq4a7mli",
+      },
+      {
+        id: "eth_denver_poap",
+        name: "ETH Denver Booth POAP",
+        image: "bafkreicjotywyeuqpyz6nrii77q7asuvnzolyxlus6p4xzpu44g7ehfutm",
+        contract_id: "foo",
+        method: "bar",
+        args: "baz",
+      },
+      {
+        id: "foo",
+        name: "NEAR Booth POAP",
+        image: "bafkreihpxtzl6mlz4klcroliybkopwnxe7mfa7g64kazclm23r3igisbz4",
+        contract_id: "foo",
+        method: "bar",
+        args: "baz",
+      },
+      {
+        id: "bar",
+        name: "Scavenger Hunt POAP",
+        image: "bafybeidjffqs24y2pvgkb7lrtxjykenqj77s655mri6keetnjr6qygi64y",
+        contract_id: "foo",
+        method: "bar",
+        args: "baz",
+      },
+    ];
     console.log("Creating drop: ", newAccountId);
     await sendTransaction({
       signerAccount: accountObj,
       receiverId: newAccountId,
-      methodName: "create_drop",
+      methodName: "create_drop_batch",
       args: {
-        drop_data: {
-          id: "illia_talk",
-          amount: utils.format.parseNearAmount("50"),
-          name: "Illia's Talk",
-          description: "Illia's talk on the Ethereum ecosystem",
-          image: "bafybeibmri2ezjt3y2hsvzygpytsq7cinxzelkksh33mksl5p37ryt44qe",
-        },
-      },
-      deposit: "0",
-      gas,
-    });
-
-    await sendTransaction({
-      signerAccount: accountObj,
-      receiverId: newAccountId,
-      methodName: "create_drop",
-      args: {
-        drop_data: {
-          id: "near_sponsor_scavenger_1",
-          scavenger_ids: ["foo", "bar"],
-          amount: utils.format.parseNearAmount("100"),
-          name: "NEAR Sponsor Scavenger Hunt",
-          description: "Find all the QRs and receive an NFT!",
-          image: "bafybeibmri2ezjt3y2hsvzygpytsq7cinxzelkksh33mksl5p37ryt44qe",
-        },
+        drops,
       },
       deposit: "0",
       gas,
