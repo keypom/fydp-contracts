@@ -126,6 +126,7 @@ const main = async () => {
           salesValidThrough: ticket.salesValidThrough,
           passValidThrough: ticket.passValidThrough,
           price: ticket.price,
+          priceUSD: ticket.priceUSD,
           maxSupply: ticket.maxSupply,
           limitPerUser: Math.floor(Math.random() * 10) + 1,
         };
@@ -193,7 +194,7 @@ const main = async () => {
               event_id: event.eventMeta.id,
               funder_id: signerAccount.accountId,
               ticket_information,
-              stripe_status: false,
+              stripe_status: true,
             }),
             attached_deposit: utils.format.parseNearAmount("1"),
           },

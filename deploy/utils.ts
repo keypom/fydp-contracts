@@ -345,10 +345,11 @@ export function generateEvents(numEvents = 40) {
     };
 
     let tickets: ZombieDropMetadata[] = [];
-    // tickets.push({
+    // tickets.push(
+    //   {
     //   name: `Member GA`,
     //   eventId,
-    //   description: `\-CHECKLIST\-Fourteen-day full event pass\-Access to applications to contribute\-Access to pre-event Discord\-Access to Official ETHDenver Parties\-SporkDAO Member Airdrops\-Earn $Spork by Contributing\-ETHDenver Swag + Discounts`,
+    //   description: `Non Refundable. Non-Transferrable.%CHECKLIST%Fourteen-day full event pass%ITEM%Access to applications to contribute%ITEM%Access to pre-event Discord%ITEM%Access to Official ETHDenver Parties%ITEM%SporkDAO Member Airdrops%ITEM%Earn $Spork by Contributing%ITEM%ETHDenver Swag + Discounts%END%`,
     //   salesValidThrough: {
     //     startDate: Date.now(),
     //     endDate: new Date(2025, 3, 3).getTime(),
@@ -362,28 +363,10 @@ export function generateEvents(numEvents = 40) {
     //   maxSupply: 25000,
     //   dateCreated: new Date().toISOString(),
     // });
-    // tickets.push({
-    //   name: `Non Member GA`,
-    //   eventId,
-    //   description: `\-CHECKLIST\-Fourteen-day full event pass\-Access to applications to contribute\-Access to pre-event Discord\-Access to Official ETHDenver Parties\-ETHDenver Swag`,
-    //   salesValidThrough: {
-    //     startDate: Date.now(),
-    //     endDate: new Date(2025, 3, 3).getTime(),
-    //   },
-    //   passValidThrough: {
-    //     startDate: Date.now(),
-    //     endDate: new Date(2025, 3, 3).getTime(),
-    //   },
-    //   priceUSD: "599",
-    //   price: utils.format.parseNearAmount("100"),
-    //   artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
-    //   maxSupply: 25000,
-    //   dateCreated: new Date().toISOString(),
-    // });
     tickets.push({
-      name: `SporkWhale VIP`,
+      name: `Non Member GA`,
       eventId,
-      description: `\-CHECKLIST\-Everything in GA and...\-VIP Entrance (shorter wait)\-SporkWhale VIP Loung w/ light snacks and beverages\-Front Row Seating at Stages\-Official Parties SporkWhale Viewing\-Requires NFT to Access Lounge`,
+      description: `Non Refundable. Non-Transferrable.%CHECKLIST%Fourteen-day full event pass%ITEM%Access to applications to contribute%ITEM%Access to pre-event Discord%ITEM%Access to Official ETHDenver Parties%ITEM%ETHDenver Swag%END%`,
       salesValidThrough: {
         startDate: Date.now(),
         endDate: new Date(2025, 3, 3).getTime(),
@@ -392,7 +375,25 @@ export function generateEvents(numEvents = 40) {
         startDate: Date.now(),
         endDate: new Date(2025, 3, 3).getTime(),
       },
-      priceUSD: "2500",
+      priceUSD: "59900",
+      price: utils.format.parseNearAmount("10"),
+      artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
+      maxSupply: 25000,
+      dateCreated: new Date().toISOString(),
+    });
+    tickets.push({
+      name: `SporkWhale VIP`,
+      eventId,
+      description: `Non Refundable. Non-Transferrable.%CHECKLIST%Everything in GA and...%ITEM%VIP Entrance (shorter wait)%ITEM%SporkWhale VIP Loung w/ light snacks and beverages%ITEM%Front Row Seating at Stages%ITEM%Official Parties SporkWhale Viewing%ITEM%Requires NFT to Access Lounge%END%`,
+      salesValidThrough: {
+        startDate: Date.now(),
+        endDate: new Date(2025, 3, 3).getTime(),
+      },
+      passValidThrough: {
+        startDate: Date.now(),
+        endDate: new Date(2025, 3, 3).getTime(),
+      },
+      priceUSD: "250000",
       price: utils.format.parseNearAmount("10"),
       artwork: "bafybeibmri2ezjt3y2hsvzygpytsq7cinxzelkksh33mksl5p37ryt44qe",
       maxSupply: 25000,
