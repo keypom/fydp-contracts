@@ -34,9 +34,9 @@ const main = async () => {
   const signerAccount = await near.account("benjiman.testnet");
   const masterKey = "MASTER_KEY";
 
-  let keypomContractId = `1710351544642-kp-ticketing.testnet`;
-  let marketplaceContractId = `1710351544642-marketplace.testnet`;
-  let factoryContractId = `1710351544642-factory.testnet`;
+  let keypomContractId = `1715705713095-kp-ticketing.testnet`;
+  let marketplaceContractId = `1715705713095-marketplace.testnet`;
+  let factoryContractId = `1715705713095-factory.testnet`;
   if (createAccounts) {
     keypomContractId = `${Date.now().toString()}-kp-ticketing.testnet`;
     marketplaceContractId = `${Date.now().toString()}-marketplace.testnet`;
@@ -210,9 +210,11 @@ const main = async () => {
   }
 
   let allKeyData: { [key: string]: string[] } = {};
+  let eventIds: string[] = [];
   for (const curTicket of allTickets) {
     try {
       const { dropId, eventId, ticket, eventQuestions } = curTicket;
+      eventIds.push(eventId);
       const keyPairs = await addTickets({
         signerAccount,
         funderAccountId: signerAccount.accountId,
@@ -243,25 +245,11 @@ const main = async () => {
     }
   }
 
-  return;
+  for (let i = 0; i < eventIds.length; i++) {
+    let id = eventIds[i];
+    console.log(`http://localhost:3000/scan/event/benjiman.testnet:${id}`);
+  }
 };
-
-async function test() {
-  const near = await initNear();
-  let keypomContractId = `1709834705601-kp-ticketing.testnet`;
-  const signerAccount = await near.account("benjiman.testnet");
-  const eventId = "29f2f55e-be89-43e8-aa27-da49cbbed43b";
-
-  const funderInfo = await signerAccount.viewFunction(
-    keypomContractId,
-    "get_funder_info",
-    { account_id: signerAccount.accountId },
-  );
-
-  const funderMeta: FunderMetadata = JSON.parse(funderInfo.metadata);
-  const eventInfo = funderMeta[eventId];
-  console.log("Event Info: ", eventInfo);
-}
 
 //test();
 main().catch(console.error);

@@ -17,6 +17,7 @@ import {
   ZombieReturnedEvent,
 } from "./interfaces";
 import * as crypto from "crypto";
+import { EventInfo, EventStyles } from "./EventStyleInterfaces";
 
 const {
   KeyPair,
@@ -207,6 +208,27 @@ export async function createAccountDeployContract({
         image: "bafkreiblvfmo7r4zawd5c45qudwhik3ycdqdnpikbrysp5xdrrvq4a7mli",
       },
       {
+        id: "scavenger_2",
+        scavenger_ids: ["foo", "bar", "baz", "biz"],
+        amount: utils.format.parseNearAmount("100"),
+        name: "Avalanche Sponsor Scavenger Hunt",
+        image: "bafkreibrkm6f7ahcoyvnp24vga4uqxsosmaa7gqfxuledmawj23ghwmbfq",
+      },
+      {
+        id: "scavenger_3",
+        scavenger_ids: ["foo", "bar", "baz", "biz", "bop", "blah", "blez"],
+        amount: utils.format.parseNearAmount("100"),
+        name: "Eth Denver Official Scavenger Hunt",
+        image: "bafkreifqx7qi4xycadvlkvqdnegbcxxftt3foxytltg7s3dplgm6ysssnm",
+      },
+      {
+        id: "scavenger_4",
+        scavenger_ids: ["foo", "bar"],
+        amount: utils.format.parseNearAmount("100"),
+        name: "Proximity After Party",
+        image: "bafkreibvv4ivrm72zrvuu4w7oev5zncks372k2eoud6os2ldxcf7qjcjyy",
+      },
+      {
         id: "eth_denver_poap",
         name: "ETH Denver Booth POAP",
         image: "bafkreicjotywyeuqpyz6nrii77q7asuvnzolyxlus6p4xzpu44g7ehfutm",
@@ -290,7 +312,63 @@ export function generateEvents(numEvents = 40) {
   for (let i = 0; i < numEvents; i++) {
     const eventName = `Eth Denver 2025`;
     const eventId = crypto.randomUUID().toString();
-    const eventInfo = {
+    const styles: EventStyles = {
+      title: {
+        color: "white",
+        fontFamily: "denverHeading",
+        fontSize: { base: "6xl", md: "8xl" },
+      },
+      h1: {
+        color: "#844AFF",
+        fontFamily: "denverBody",
+        fontWeight: "600",
+        fontSize: { base: "lg", md: "2xl" },
+      },
+      h2: {
+        color: "black",
+        fontFamily: "denverBody",
+        fontWeight: "500",
+        fontSize: { base: "lg", md: "2xl" },
+      },
+      h3: {
+        color: "black",
+        fontFamily: "denverBody",
+        fontWeight: "400",
+        fontSize: { base: "lg", md: "2xl" },
+      },
+      buttons: {
+        primary: {
+          bg: "#FF65AF",
+          color: "white",
+          fontFamily: "denverBody",
+          fontSize: "2xl",
+          fontWeight: "500",
+          h: "48px",
+          sx: { _hover: { backgroundColor: "#FF65AF" } },
+        },
+        secondary: {
+          bg: "gray.200",
+          color: "black",
+          fontFamily: "denverBody",
+          fontSize: "2xl",
+          fontWeight: "500",
+          h: "48px",
+          sx: { _hover: { backgroundColor: "gray.300" } },
+        },
+      },
+      border: {
+        border:
+          "linear-gradient(white, white) padding-box, linear-gradient(0deg, rgba(255,101, 175,1) 0%, rgba(132,74,255,0.27) 100%) border-box",
+      },
+      icon: {
+        image: "bafkreieuxeeutfk2ogrz4uu4mbajo2vvdzwrbdqlb7ofwwsynfeeocmtde",
+        bg: "#F8F8F9",
+        border: "#BE7BFB",
+      },
+      background: "bafybeibadywqnworqo5azj4rume54j5wuqgphljds7haxdf2kc45ytewpy",
+    };
+
+    const eventInfo: EventInfo = {
       name: eventName,
       dateCreated: Date.now().toString(),
       id: eventId,
@@ -301,43 +379,20 @@ export function generateEvents(numEvents = 40) {
         endDate: new Date(2025, 3, 3).getTime(),
       },
       artwork: "bafybeibadywqnworqo5azj4rume54j5wuqgphljds7haxdf2kc45ytewpy",
+      styles,
       qrPage: {
         showTitle: false,
         showLocation: false,
         showDate: false,
         dateUnderQR: true,
+        showDownloadButton: false,
+        showSellTicketButton: true,
+        sellableThroughText: false,
+      },
+      welcomePage: {
         title: {
-          color: "white",
-          fontFamily: "denverHeading",
-          fontSize: { base: "6xl", md: "8xl" },
-        },
-        content: {
-          border:
-            "linear-gradient(white, white) padding-box, linear-gradient(0deg, rgba(255,101, 175,1) 0%, rgba(132,74,255,0.27) 100%) border-box",
-          helperText: {
-            fontFamily: "denverBody",
-            fontWeight: "400",
-            text: "Once inside, visit this page to start your journey",
-          },
-          sellButton: {
-            bg: "#FF65AF",
-            fontFamily: "denverBody",
-            fontSize: "2xl",
-            fontWeight: "500",
-            h: "48px",
-            color: "white",
-            helperText: false,
-            sx: { _hover: { backgroundColor: "#FF65AF" } },
-            text: "SELL TICKET",
-          },
-          downloadButton: false,
-        },
-        background:
-          "bafybeibadywqnworqo5azj4rume54j5wuqgphljds7haxdf2kc45ytewpy",
-        boxIcon: {
-          image: "bafkreieuxeeutfk2ogrz4uu4mbajo2vvdzwrbdqlb7ofwwsynfeeocmtde",
-          bg: "#F8F8F9",
-          border: "#BE7BFB",
+          text: "ETH Denver 2025",
+          fontSize: { base: "2xl", md: "3xl" },
         },
       },
       questions: questions,
@@ -617,7 +672,7 @@ export const addTickets = async ({
   eventQuestions?: QuestionInfo[];
 }): Promise<string[]> => {
   const maxSupply = ticket.maxSupply || 100;
-  let numTickets = 3;
+  let numTickets = 1;
   numTickets = Math.min(numTickets, maxSupply);
 
   let keyData: {
