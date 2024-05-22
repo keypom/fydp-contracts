@@ -315,24 +315,24 @@ export function generateEvents(numEvents = 40) {
     const styles: EventStyles = {
       title: {
         color: "white",
-        fontFamily: "denverHeading",
+        fontFamily: "ConsenusTitle",
         fontSize: { base: "6xl", md: "8xl" },
       },
       h1: {
-        color: "#844AFF",
-        fontFamily: "denverBody",
+        color: "#2DD0CD",
+        fontFamily: "ConsensusHeading",
         fontWeight: "600",
         fontSize: { base: "lg", md: "2xl" },
       },
       h2: {
-        color: "black",
-        fontFamily: "denverBody",
+        color: "#020A0A",
+        fontFamily: "ConsensusHeading",
         fontWeight: "500",
         fontSize: { base: "lg", md: "2xl" },
       },
       h3: {
-        color: "black",
-        fontFamily: "denverBody",
+        color: "#020A0A",
+        fontFamily: "ConsensusHeading",
         fontWeight: "400",
         fontSize: { base: "lg", md: "2xl" },
       },
