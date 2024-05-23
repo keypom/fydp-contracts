@@ -33,6 +33,7 @@ const main = async () => {
 
   const signerAccount = await near.account("benjiman.testnet");
   const masterKey = "MASTER_KEY";
+  const dropIds: string[] = [];
 
   let keypomContractId = `1715705713095-kp-ticketing.testnet`;
   let marketplaceContractId = `1715705713095-marketplace.testnet`;
@@ -101,9 +102,7 @@ const main = async () => {
       let totalExcessBytes = 0;
       for (const ticket of event.tickets) {
         nonce += 1;
-        const dropId = `${Date.now().toString()}-${ticket.name
-          .replaceAll(" ", "")
-          .toLocaleLowerCase()}-${nonce.toString()}`;
+        const dropId = ticket.dropId;
 
         ticket_information[`${dropId}`] = {
           max_tickets: ticket.maxSupply,
@@ -145,7 +144,6 @@ const main = async () => {
         };
 
         let assetData = [
-          { uses: 1, assets: [null], config: { permissions: "claim" } },
           {
             uses: 1,
             assets: [null],

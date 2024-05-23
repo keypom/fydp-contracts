@@ -71,6 +71,7 @@ export interface ZombieDropMetadata {
   priceUSD?: string;
   artwork: string;
   maxSupply?: number;
+  dropId: string;
 }
 
 export interface ZombieReturnedEvent {

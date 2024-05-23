@@ -137,6 +137,13 @@ export async function createContracts({
     gas: "300000000000000",
   });
 
+  let starting_near_balance: Record<string, string> = {};
+  starting_near_balance["explorer_pass"] = utils.format.parseNearAmount("1");
+  starting_near_balance["piranha_pass"] = utils.format.parseNearAmount("1");
+  let starting_token_balance: Record<string, string> = {};
+  starting_token_balance["explorer_pass"] = utils.format.parseNearAmount("50");
+  starting_token_balance["piranha_pass"] = utils.format.parseNearAmount("250");
+
   await createAccountDeployContract({
     signerAccount,
     newAccountId: factoryContractId,
@@ -145,9 +152,11 @@ export async function createContracts({
     wasmPath: "./out/factory.wasm",
     methodName: "new",
     args: {
-      starting_near_balance: utils.format.parseNearAmount("1"),
-      starting_ncon_balance: utils.format.parseNearAmount("250"),
+      starting_near_balance,
+      starting_token_balance,
       keypom_contract: keypomContractId,
+      token_name: "Consensus Token",
+      symbol: "DESK",
     },
     deposit: "0",
     gas: "300000000000000",
@@ -315,7 +324,7 @@ export function generateEvents(numEvents = 40) {
     const styles: EventStyles = {
       title: {
         color: "white",
-        fontFamily: "ConsenusTitle",
+        fontFamily: "ConsensusTitle",
         fontSize: { base: "6xl", md: "8xl" },
       },
       h1: {
@@ -338,18 +347,18 @@ export function generateEvents(numEvents = 40) {
       },
       buttons: {
         primary: {
-          bg: "#FF65AF",
+          bg: "#C936F6",
           color: "white",
-          fontFamily: "denverBody",
+          fontFamily: "ConsensusHeading",
           fontSize: "2xl",
           fontWeight: "500",
           h: "48px",
-          sx: { _hover: { backgroundColor: "#FF65AF" } },
+          sx: { _hover: { backgroundColor: "#C936F6" } },
         },
         secondary: {
           bg: "gray.200",
           color: "black",
-          fontFamily: "denverBody",
+          fontFamily: "ConsensusHeading",
           fontSize: "2xl",
           fontWeight: "500",
           h: "48px",
@@ -361,11 +370,11 @@ export function generateEvents(numEvents = 40) {
           "linear-gradient(white, white) padding-box, linear-gradient(0deg, rgba(255,101, 175,1) 0%, rgba(132,74,255,0.27) 100%) border-box",
       },
       icon: {
-        image: "bafkreieuxeeutfk2ogrz4uu4mbajo2vvdzwrbdqlb7ofwwsynfeeocmtde",
-        bg: "#F8F8F9",
-        border: "#BE7BFB",
+        image: "bafkreieaxg4ncbu7bo7yxnrhlozerbfqurkc3xha6ty5vv4lmyugttbc5a",
+        bg: "#020A0A",
+        border: "#C936F6",
       },
-      background: "bafybeibadywqnworqo5azj4rume54j5wuqgphljds7haxdf2kc45ytewpy",
+      background: "bafybeihymx2mra4pwzgh5ljmzn5kgnypn6vco7os2i5r2cz4mfr4dxviae",
     };
 
     const eventInfo: EventInfo = {
@@ -391,7 +400,7 @@ export function generateEvents(numEvents = 40) {
       },
       welcomePage: {
         title: {
-          text: "ETH Denver 2025",
+          text: "Consensus 2025",
           fontSize: { base: "2xl", md: "3xl" },
         },
       },
@@ -419,7 +428,7 @@ export function generateEvents(numEvents = 40) {
     //   dateCreated: new Date().toISOString(),
     // });
     tickets.push({
-      name: `Non Member GA`,
+      name: `Explorer Pass`,
       eventId,
       description: `Non Refundable. Non-Transferrable.%CHECKLIST%Fourteen-day full event pass%ITEM%Access to applications to contribute%ITEM%Access to pre-event Discord%ITEM%Access to Official ETHDenver Parties%ITEM%ETHDenver Swag%END%`,
       salesValidThrough: {
@@ -432,12 +441,13 @@ export function generateEvents(numEvents = 40) {
       },
       priceUSD: "59900",
       price: utils.format.parseNearAmount("10"),
-      artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
+      artwork: "bafybeibl5iurnah7jyerkoglqeh6ln6suitnoabd636k23k4qqakvhxuju",
       maxSupply: 25000,
       dateCreated: new Date().toISOString(),
+      dropId: "explorer_pass",
     });
     tickets.push({
-      name: `SporkWhale VIP`,
+      name: `Piranha Pass`,
       eventId,
       description: `Non Refundable. Non-Transferrable.%CHECKLIST%Everything in GA and...%ITEM%VIP Entrance (shorter wait)%ITEM%SporkWhale VIP Loung w/ light snacks and beverages%ITEM%Front Row Seating at Stages%ITEM%Official Parties SporkWhale Viewing%ITEM%Requires NFT to Access Lounge%END%`,
       salesValidThrough: {
@@ -450,9 +460,10 @@ export function generateEvents(numEvents = 40) {
       },
       priceUSD: "250000",
       price: utils.format.parseNearAmount("10"),
-      artwork: "bafybeibmri2ezjt3y2hsvzygpytsq7cinxzelkksh33mksl5p37ryt44qe",
+      artwork: "bafybeidj2w4mf4cicr4zz4cki372gsgvukipimdmcdjddhfemmlbrpctwy",
       maxSupply: 25000,
       dateCreated: new Date().toISOString(),
+      dropId: "piranha_pass",
     });
 
     events.push({
