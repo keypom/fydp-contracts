@@ -230,24 +230,22 @@ const main = async () => {
     }
   }
 
-  // Loop through key data and print
+  // Write the key data to a CSV file
+  const csvData: string[] = [];
   for (const dropId in allKeyData) {
-    console.log(`Drop ID: ${dropId}`);
     for (const secretKey of allKeyData[dropId]) {
-      console.log(
-        `http://localhost:3000/tickets/ticket/${dropId}#${secretKey.replace(
-          "ed25519:",
-          "",
-        )}`,
-      );
+      const csvRow = `${dropId}, /tickets/ticket/${dropId}#${secretKey.replace(
+        "ed25519:",
+        "",
+      )}`;
+      csvData.push(csvRow);
     }
   }
 
-  for (let i = 0; i < eventIds.length; i++) {
-    let id = eventIds[i];
-    console.log(`http://localhost:3000/scan/event/benjiman.testnet:${id}`);
-  }
+  const csvFilePath = path.join(__dirname, "key_data.csv");
+  fs.writeFileSync(csvFilePath, csvData.join("\n"));
+
+  console.log(`Key data written to ${csvFilePath}`);
 };
 
-//test();
 main().catch(console.error);

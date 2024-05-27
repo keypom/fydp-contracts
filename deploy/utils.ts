@@ -207,56 +207,56 @@ export async function createAccountDeployContract({
         id: "illia_talk",
         amount: utils.format.parseNearAmount("50"),
         name: "Illia's Talk",
-        image: "bafkreiblvfmo7r4zawd5c45qudwhik3ycdqdnpikbrysp5xdrrvq4a7mli",
+        image: "desk.png",
       },
       {
         id: "near_sponsor_scavenger_1",
         scavenger_ids: ["foo", "bar"],
         amount: utils.format.parseNearAmount("100"),
         name: "NEAR Sponsor Scavenger Hunt",
-        image: "bafkreiblvfmo7r4zawd5c45qudwhik3ycdqdnpikbrysp5xdrrvq4a7mli",
+        image: "near_scavenger.jpg",
       },
       {
         id: "scavenger_2",
         scavenger_ids: ["foo", "bar", "baz", "biz"],
         amount: utils.format.parseNearAmount("100"),
         name: "Avalanche Sponsor Scavenger Hunt",
-        image: "bafkreibrkm6f7ahcoyvnp24vga4uqxsosmaa7gqfxuledmawj23ghwmbfq",
+        image: "av_logo.png",
       },
       {
         id: "scavenger_3",
         scavenger_ids: ["foo", "bar", "baz", "biz", "bop", "blah", "blez"],
         amount: utils.format.parseNearAmount("100"),
-        name: "Eth Denver Official Scavenger Hunt",
-        image: "bafkreifqx7qi4xycadvlkvqdnegbcxxftt3foxytltg7s3dplgm6ysssnm",
+        name: "Consensus Official Scavenger Hunt",
+        image: "desk.png",
       },
       {
         id: "scavenger_4",
         scavenger_ids: ["foo", "bar"],
         amount: utils.format.parseNearAmount("100"),
         name: "Proximity After Party",
-        image: "bafkreibvv4ivrm72zrvuu4w7oev5zncks372k2eoud6os2ldxcf7qjcjyy",
+        image: "proximity.jpg",
       },
       {
-        id: "eth_denver_poap",
-        name: "ETH Denver Booth POAP",
-        image: "bafkreicjotywyeuqpyz6nrii77q7asuvnzolyxlus6p4xzpu44g7ehfutm",
+        id: "poap_1",
+        name: "Stellar Booth POAP",
+        image: "stellar.png",
         contract_id: "foo",
         method: "bar",
         args: "baz",
       },
       {
-        id: "foo",
+        id: "poap_2",
         name: "NEAR Booth POAP",
-        image: "bafkreihpxtzl6mlz4klcroliybkopwnxe7mfa7g64kazclm23r3igisbz4",
+        image: "near_scavenger.jpg",
         contract_id: "foo",
         method: "bar",
         args: "baz",
       },
       {
-        id: "bar",
+        id: "poap_3",
         name: "Scavenger Hunt POAP",
-        image: "bafybeidjffqs24y2pvgkb7lrtxjykenqj77s655mri6keetnjr6qygi64y",
+        image: "consensus_logo.png",
         contract_id: "foo",
         method: "bar",
         args: "baz",
@@ -325,7 +325,7 @@ export function generateEvents(numEvents = 40) {
       title: {
         color: "white",
         fontFamily: "ConsensusTitle",
-        fontSize: { base: "6xl", md: "8xl" },
+        fontSize: { base: "5xl", md: "8xl" },
       },
       h1: {
         color: "#2DD0CD",
@@ -367,14 +367,14 @@ export function generateEvents(numEvents = 40) {
       },
       border: {
         border:
-          "linear-gradient(white, white) padding-box, linear-gradient(0deg, rgba(255,101, 175,1) 0%, rgba(132,74,255,0.27) 100%) border-box",
+          "linear-gradient(white, white) padding-box, linear-gradient(0deg, rgba(45, 208, 205,1) 0%, rgba(201, 54, 246,1) 100%) border-box",
       },
       icon: {
-        image: "bafkreieaxg4ncbu7bo7yxnrhlozerbfqurkc3xha6ty5vv4lmyugttbc5a",
+        image: "consensus_logo.png",
         bg: "#020A0A",
         border: "#C936F6",
       },
-      background: "bafybeihymx2mra4pwzgh5ljmzn5kgnypn6vco7os2i5r2cz4mfr4dxviae",
+      background: "background.png",
     };
 
     const eventInfo: EventInfo = {
@@ -441,7 +441,7 @@ export function generateEvents(numEvents = 40) {
       },
       priceUSD: "59900",
       price: utils.format.parseNearAmount("10"),
-      artwork: "bafybeibl5iurnah7jyerkoglqeh6ln6suitnoabd636k23k4qqakvhxuju",
+      artwork: "explorer_pass.png",
       maxSupply: 25000,
       dateCreated: new Date().toISOString(),
       dropId: "explorer_pass",
@@ -460,7 +460,7 @@ export function generateEvents(numEvents = 40) {
       },
       priceUSD: "250000",
       price: utils.format.parseNearAmount("10"),
-      artwork: "bafybeidj2w4mf4cicr4zz4cki372gsgvukipimdmcdjddhfemmlbrpctwy",
+      artwork: "piranha_pass.png",
       maxSupply: 25000,
       dateCreated: new Date().toISOString(),
       dropId: "piranha_pass",
@@ -683,7 +683,7 @@ export const addTickets = async ({
   eventQuestions?: QuestionInfo[];
 }): Promise<string[]> => {
   const maxSupply = ticket.maxSupply || 100;
-  let numTickets = 1;
+  let numTickets = 25;
   numTickets = Math.min(numTickets, maxSupply);
 
   let keyData: {

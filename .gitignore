@@ -7,6 +7,7 @@
 /out
 /neardev
 doc
+**/key_data*
 
 #cache
 .cache
