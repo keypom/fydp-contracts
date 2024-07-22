@@ -137,12 +137,22 @@ export async function createContracts({
     gas: "300000000000000",
   });
 
-  let starting_near_balance: Record<string, string> = {};
-  starting_near_balance["explorer_pass"] = utils.format.parseNearAmount("1");
-  starting_near_balance["piranha_pass"] = utils.format.parseNearAmount("1");
-  let starting_token_balance: Record<string, string> = {};
-  starting_token_balance["explorer_pass"] = utils.format.parseNearAmount("50");
-  starting_token_balance["piranha_pass"] = utils.format.parseNearAmount("250");
+  let ticket_data: Record<string, any> = {};
+  ticket_data["ga_pass"] = {
+    starting_near_balance: utils.format.parseNearAmount("1"),
+    starting_token_balance: utils.format.parseNearAmount("50"),
+    account_type: "Basic"
+  }
+  ticket_data["sponsor_pass"] = {
+    starting_near_balance: utils.format.parseNearAmount("1"),
+    starting_token_balance: utils.format.parseNearAmount("5000"),
+    account_type: "Sponsor"
+  }
+  ticket_data["admin_pass"] = {
+    starting_near_balance: utils.format.parseNearAmount("1"),
+    starting_token_balance: utils.format.parseNearAmount("100000"),
+    account_type: "Admin"
+  }
 
   await createAccountDeployContract({
     signerAccount,
@@ -152,8 +162,7 @@ export async function createContracts({
     wasmPath: "./out/factory.wasm",
     methodName: "new",
     args: {
-      starting_near_balance,
-      starting_token_balance,
+      ticket_data,
       keypom_contract: keypomContractId,
       token_name: "Consensus Token",
       symbol: "DESK",
@@ -319,118 +328,27 @@ export function generateEvents(numEvents = 40) {
 
   let events: ZombieReturnedEvent[] = [];
   for (let i = 0; i < numEvents; i++) {
-    const eventName = `Eth Denver 2025`;
+    const eventName = `Redacted 2025`;
     const eventId = crypto.randomUUID().toString();
-    const styles: EventStyles = {
-      title: {
-        color: "white",
-        fontFamily: "ConsensusTitle",
-        fontSize: { base: "5xl", md: "8xl" },
-      },
-      h1: {
-        color: "#2DD0CD",
-        fontFamily: "ConsensusHeading",
-        fontWeight: "600",
-        fontSize: { base: "lg", md: "2xl" },
-      },
-      h2: {
-        color: "#020A0A",
-        fontFamily: "ConsensusHeading",
-        fontWeight: "500",
-        fontSize: { base: "lg", md: "2xl" },
-      },
-      h3: {
-        color: "#020A0A",
-        fontFamily: "ConsensusHeading",
-        fontWeight: "400",
-        fontSize: { base: "lg", md: "2xl" },
-      },
-      buttons: {
-        primary: {
-          bg: "#C936F6",
-          color: "white",
-          fontFamily: "ConsensusHeading",
-          fontSize: "2xl",
-          fontWeight: "500",
-          h: "48px",
-          sx: { _hover: { backgroundColor: "#C936F6" } },
-        },
-        secondary: {
-          bg: "gray.200",
-          color: "black",
-          fontFamily: "ConsensusHeading",
-          fontSize: "2xl",
-          fontWeight: "500",
-          h: "48px",
-          sx: { _hover: { backgroundColor: "gray.300" } },
-        },
-      },
-      border: {
-        border:
-          "linear-gradient(white, white) padding-box, linear-gradient(0deg, rgba(45, 208, 205,1) 0%, rgba(201, 54, 246,1) 100%) border-box",
-      },
-      icon: {
-        image: "consensus_logo.png",
-        bg: "#020A0A",
-        border: "#C936F6",
-      },
-      background: "background.png",
-    };
 
     const eventInfo: EventInfo = {
       name: eventName,
       dateCreated: Date.now().toString(),
       id: eventId,
-      description: `ETHDenver celebrates the convergence of blockchain, culture, and education. Located in the heart of Denver, Colorado, ETHDenver is the premiere destination for #BUIDLing the decentralized future..`,
-      location: `4655 Humboldt St, Denver CO 80216`,
+      description: `Join us in Bangkok this November for [REDACTED] - a convergence of visionaries, builders, and pioneers from AI x Web3 backgrounds united in shaping a future where technology belongs to the people, not corporations.`,
+      location: `257 CHAROENNAKORN ROAD THONBURI BANGKOK 10600`,
       date: {
         startDate: new Date(2025, 2, 23).getTime(),
         endDate: new Date(2025, 3, 3).getTime(),
       },
       artwork: "bafybeibadywqnworqo5azj4rume54j5wuqgphljds7haxdf2kc45ytewpy",
-      styles,
-      qrPage: {
-        showTitle: false,
-        showLocation: false,
-        showDate: false,
-        dateUnderQR: true,
-        showDownloadButton: false,
-        showSellTicketButton: true,
-        sellableThroughText: false,
-      },
-      welcomePage: {
-        title: {
-          text: "Consensus 2025",
-          fontSize: { base: "2xl", md: "3xl" },
-        },
-      },
-      questions: questions,
-      nearCheckout: true,
     };
 
-    let tickets: ZombieDropMetadata[] = [];
-    // tickets.push(
-    //   {
-    //   name: `Member GA`,
-    //   eventId,
-    //   description: `Non Refundable. Non-Transferrable.%CHECKLIST%Fourteen-day full event pass%ITEM%Access to applications to contribute%ITEM%Access to pre-event Discord%ITEM%Access to Official ETHDenver Parties%ITEM%SporkDAO Member Airdrops%ITEM%Earn $Spork by Contributing%ITEM%ETHDenver Swag + Discounts%END%`,
-    //   salesValidThrough: {
-    //     startDate: Date.now(),
-    //     endDate: new Date(2025, 3, 3).getTime(),
-    //   },
-    //   passValidThrough: {
-    //     startDate: Date.now(),
-    //     endDate: new Date(2025, 3, 3).getTime(),
-    //   },
-    //   price: "0",
-    //   artwork: "bafkreiand5pmov7dr74yfonwgetp5lmvvklwwatqmqt63heaovfb5tt6ly",
-    //   maxSupply: 25000,
-    //   dateCreated: new Date().toISOString(),
-    // });
+    let tickets: any[] = [];
     tickets.push({
-      name: `Explorer Pass`,
+      name: `General Admission`,
       eventId,
-      description: `Non Refundable. Non-Transferrable.%CHECKLIST%Fourteen-day full event pass%ITEM%Access to applications to contribute%ITEM%Access to pre-event Discord%ITEM%Access to Official ETHDenver Parties%ITEM%ETHDenver Swag%END%`,
+      description: ``,
       salesValidThrough: {
         startDate: Date.now(),
         endDate: new Date(2025, 3, 3).getTime(),
@@ -444,26 +362,7 @@ export function generateEvents(numEvents = 40) {
       artwork: "explorer_pass.png",
       maxSupply: 25000,
       dateCreated: new Date().toISOString(),
-      dropId: "explorer_pass",
-    });
-    tickets.push({
-      name: `Piranha Pass`,
-      eventId,
-      description: `Non Refundable. Non-Transferrable.%CHECKLIST%Everything in GA and...%ITEM%VIP Entrance (shorter wait)%ITEM%SporkWhale VIP Loung w/ light snacks and beverages%ITEM%Front Row Seating at Stages%ITEM%Official Parties SporkWhale Viewing%ITEM%Requires NFT to Access Lounge%END%`,
-      salesValidThrough: {
-        startDate: Date.now(),
-        endDate: new Date(2025, 3, 3).getTime(),
-      },
-      passValidThrough: {
-        startDate: Date.now(),
-        endDate: new Date(2025, 3, 3).getTime(),
-      },
-      priceUSD: "250000",
-      price: utils.format.parseNearAmount("10"),
-      artwork: "piranha_pass.png",
-      maxSupply: 25000,
-      dateCreated: new Date().toISOString(),
-      dropId: "piranha_pass",
+      dropId: "ga_pass",
     });
 
     events.push({
@@ -683,7 +582,7 @@ export const addTickets = async ({
   eventQuestions?: QuestionInfo[];
 }): Promise<string[]> => {
   const maxSupply = ticket.maxSupply || 100;
-  let numTickets = 25;
+  let numTickets = 5;
   numTickets = Math.min(numTickets, maxSupply);
 
   let keyData: {
@@ -721,9 +620,8 @@ export const addTickets = async ({
         const randomIndex = Math.floor(
           Math.random() * questionResponses[question.question].length,
         );
-        answers[question.question] = `${
-          questionResponses[question.question][randomIndex]
-        }`;
+        answers[question.question] = `${questionResponses[question.question][randomIndex]
+          }`;
       }
     }
 
@@ -758,6 +656,67 @@ export const addTickets = async ({
     console.log("(Add Tix) ERROR!!!: ", e);
   }
   return [];
+};
+
+export const createSponsorAdmin = async ({
+  signerAccount,
+  receiverId,
+}: {
+  signerAccount: any;
+  receiverId: string;
+}) => {
+  let dashboardCsv: string[] = [];
+
+  let keyPair = KeyPair.fromRandom("ed25519");
+  let accountId = 'sponsor1'
+  // Create admin and sponsor accounts
+  await sendTransaction({
+    signerAccount,
+    receiverId,
+    methodName: "internal_create_account",
+    args: {
+      new_account_id: `${accountId}.${signerAccount.accountId}`,
+      new_public_key: keyPair.publicKey.toString(),
+      ticket_data: {
+        starting_near_balance: utils.format.parseNearAmount("1"),
+        starting_token_balance: utils.format.parseNearAmount("5000"),
+        account_type: "Sponsor"
+      }
+    },
+    deposit: "0",
+    gas: "300000000000000",
+  });
+  dashboardCsv.push(`${accountId}, /conference/dashboard/${accountId}.${signerAccount.accountId}#${keyPair.toString().replace(
+    "ed25519:",
+    "",
+  )}`);
+
+  keyPair = KeyPair.fromRandom("ed25519");
+  accountId = 'admin1'
+  // Create admin and sponsor accounts
+  await sendTransaction({
+    signerAccount,
+    receiverId,
+    methodName: "internal_create_account",
+    args: {
+      new_account_id: `${accountId}.${signerAccount.accountId}`,
+      new_public_key: keyPair.publicKey.toString(),
+      ticket_data: {
+        starting_near_balance: utils.format.parseNearAmount("1"),
+        starting_token_balance: utils.format.parseNearAmount("100000"),
+        account_type: "Admin"
+      }
+    },
+    deposit: "0",
+    gas: "300000000000000",
+  });
+  dashboardCsv.push(`${accountId}, /conference/dashboard/${accountId}.${signerAccount.accountId}#${keyPair.toString().replace(
+    "ed25519:",
+    "",
+  )}`);
+
+  const csvFilePath = path.join(__dirname, "admin_sponsor_data.csv");
+  fs.writeFileSync(csvFilePath, dashboardCsv.join("\n"));
 };
 
 // async function foo() {

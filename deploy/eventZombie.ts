@@ -9,6 +9,7 @@ import {
   addTickets,
   createAccount,
   createContracts,
+  createSponsorAdmin,
   decryptPrivateKey,
   decryptWithPrivateKey,
   deriveKeyFromPassword,
@@ -52,6 +53,8 @@ const main = async () => {
   }
 
   const marketAccount = await near.account(marketplaceContractId);
+  const factoryAccount = await near.account(factoryContractId);
+  await createSponsorAdmin({signerAccount: factoryAccount, receiverId: factoryAccount.accountId});
 
   //  Create Events (and generate keypair if necessary / update user metadata)
   // To store: public key, encrypted private key, iv, salt
@@ -96,7 +99,6 @@ const main = async () => {
       let drop_ids: string[] = [];
       let drop_configs: any = [];
       let asset_datas: any = [];
-      let ticket_information: { [key: string]: any } = {};
       let base_price: number = 1;
 
       let totalExcessBytes = 0;
@@ -104,12 +106,6 @@ const main = async () => {
         nonce += 1;
         const dropId = ticket.dropId;
 
-        ticket_information[`${dropId}`] = {
-          max_tickets: ticket.maxSupply,
-          price: ticket.price,
-          sale_start: Date.now(),
-          sale_end: Date.now() + 1000 * 60 * 60 * 24 * 2,
-        };
         base_price += 1;
 
         allTickets.push({
@@ -144,6 +140,7 @@ const main = async () => {
         };
 
         let assetData = [
+          { uses: 1, assets: [null], config: { permissions: "claim" } },
           {
             uses: 1,
             assets: [null],
@@ -159,12 +156,6 @@ const main = async () => {
         asset_datas.push(assetData);
         drop_configs.push(dropConfig);
       }
-
-      console.log(
-        `Creating event with ticket information: ${JSON.stringify(
-          ticket_information,
-        )}`,
-      );
 
       const funderMetadataString = JSON.stringify(funderMetadata);
       console.log(
@@ -184,18 +175,7 @@ const main = async () => {
           drop_ids,
           drop_configs,
           asset_datas,
-          change_user_metadata: JSON.stringify(funderMetadata),
-          on_success: {
-            receiver_id: marketplaceContractId,
-            method_name: "create_event",
-            args: JSON.stringify({
-              event_id: event.eventMeta.id,
-              funder_id: signerAccount.accountId,
-              ticket_information,
-              stripe_status: true,
-            }),
-            attached_deposit: utils.format.parseNearAmount("1"),
-          },
+          change_user_metadata: JSON.stringify(funderMetadata)
         },
         deposit: "15",
         gas: "300000000000000",

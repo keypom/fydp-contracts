@@ -50,9 +50,4 @@ export interface EventInfo {
     endDate: number;
   };
   artwork: string;
-  styles: EventStyles;
-  qrPage: QRPage;
-  welcomePage: WelcomePage;
-  questions: any; // Replace with actual type if possible
-  nearCheckout: boolean;
 }
