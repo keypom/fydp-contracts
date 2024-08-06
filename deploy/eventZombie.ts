@@ -54,7 +54,10 @@ const main = async () => {
 
   const marketAccount = await near.account(marketplaceContractId);
   const factoryAccount = await near.account(factoryContractId);
-  await createSponsorAdmin({signerAccount: factoryAccount, receiverId: factoryAccount.accountId});
+  await createSponsorAdmin({
+    signerAccount,
+    receiverId: factoryAccount.accountId,
+  });
 
   //  Create Events (and generate keypair if necessary / update user metadata)
   // To store: public key, encrypted private key, iv, salt
@@ -135,8 +138,6 @@ const main = async () => {
           nft_keys_config: {
             token_metadata: nftMetadata,
           },
-          add_key_allowlist: [marketplaceContractId],
-          transfer_key_allowlist: [marketplaceContractId],
         };
 
         let assetData = [
@@ -175,7 +176,7 @@ const main = async () => {
           drop_ids,
           drop_configs,
           asset_datas,
-          change_user_metadata: JSON.stringify(funderMetadata)
+          change_user_metadata: JSON.stringify(funderMetadata),
         },
         deposit: "15",
         gas: "300000000000000",
@@ -197,7 +198,6 @@ const main = async () => {
         signerAccount,
         funderAccountId: signerAccount.accountId,
         keypomAccountId: keypomContractId,
-        marketplaceAccount: marketAccount,
         dropId,
         ticket,
         eventId,

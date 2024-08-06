@@ -121,38 +121,38 @@ export async function createContracts({
     gas: "300000000000000",
   });
 
-  await createAccountDeployContract({
-    signerAccount,
-    newAccountId: marketplaceContractId,
-    amount: "200",
-    near,
-    wasmPath: "./out/marketplace.wasm",
-    methodName: "new",
-    args: {
-      keypom_contract: keypomContractId,
-      owner_id: "minqi.testnet",
-      v2_keypom_contract: "v2.keypom.testnet",
-    },
-    deposit: "0",
-    gas: "300000000000000",
-  });
+  // await createAccountDeployContract({
+  //   signerAccount,
+  //   newAccountId: marketplaceContractId,
+  //   amount: "200",
+  //   near,
+  //   wasmPath: "./out/marketplace.wasm",
+  //   methodName: "new",
+  //   args: {
+  //     keypom_contract: keypomContractId,
+  //     owner_id: "minqi.testnet",
+  //     v2_keypom_contract: "v2.keypom.testnet",
+  //   },
+  //   deposit: "0",
+  //   gas: "300000000000000",
+  // });
 
   let ticket_data: Record<string, any> = {};
   ticket_data["ga_pass"] = {
     starting_near_balance: utils.format.parseNearAmount("1"),
     starting_token_balance: utils.format.parseNearAmount("50"),
-    account_type: "Basic"
-  }
+    account_type: "Basic",
+  };
   ticket_data["sponsor_pass"] = {
     starting_near_balance: utils.format.parseNearAmount("1"),
     starting_token_balance: utils.format.parseNearAmount("5000"),
-    account_type: "Sponsor"
-  }
+    account_type: "Sponsor",
+  };
   ticket_data["admin_pass"] = {
     starting_near_balance: utils.format.parseNearAmount("1"),
     starting_token_balance: utils.format.parseNearAmount("100000"),
-    account_type: "Admin"
-  }
+    account_type: "Admin",
+  };
 
   await createAccountDeployContract({
     signerAccount,
@@ -166,6 +166,7 @@ export async function createContracts({
       keypom_contract: keypomContractId,
       token_name: "Consensus Token",
       symbol: "DESK",
+      admin: ["benjiman.testnet"],
     },
     deposit: "0",
     gas: "300000000000000",
@@ -209,80 +210,6 @@ export async function createAccountDeployContract({
     gas,
     wasmPath,
   });
-
-  if (createDrop) {
-    let drops = [
-      {
-        id: "illia_talk",
-        amount: utils.format.parseNearAmount("50"),
-        name: "Illia's Talk",
-        image: "desk.png",
-      },
-      {
-        id: "near_sponsor_scavenger_1",
-        scavenger_ids: ["foo", "bar"],
-        amount: utils.format.parseNearAmount("100"),
-        name: "NEAR Sponsor Scavenger Hunt",
-        image: "near_scavenger.jpg",
-      },
-      {
-        id: "scavenger_2",
-        scavenger_ids: ["foo", "bar", "baz", "biz"],
-        amount: utils.format.parseNearAmount("100"),
-        name: "Avalanche Sponsor Scavenger Hunt",
-        image: "av_logo.png",
-      },
-      {
-        id: "scavenger_3",
-        scavenger_ids: ["foo", "bar", "baz", "biz", "bop", "blah", "blez"],
-        amount: utils.format.parseNearAmount("100"),
-        name: "Consensus Official Scavenger Hunt",
-        image: "desk.png",
-      },
-      {
-        id: "scavenger_4",
-        scavenger_ids: ["foo", "bar"],
-        amount: utils.format.parseNearAmount("100"),
-        name: "Proximity After Party",
-        image: "proximity.jpg",
-      },
-      {
-        id: "poap_1",
-        name: "Stellar Booth POAP",
-        image: "stellar.png",
-        contract_id: "foo",
-        method: "bar",
-        args: "baz",
-      },
-      {
-        id: "poap_2",
-        name: "NEAR Booth POAP",
-        image: "near_scavenger.jpg",
-        contract_id: "foo",
-        method: "bar",
-        args: "baz",
-      },
-      {
-        id: "poap_3",
-        name: "Scavenger Hunt POAP",
-        image: "consensus_logo.png",
-        contract_id: "foo",
-        method: "bar",
-        args: "baz",
-      },
-    ];
-    console.log("Creating drop: ", newAccountId);
-    await sendTransaction({
-      signerAccount: accountObj,
-      receiverId: newAccountId,
-      methodName: "create_drop_batch",
-      args: {
-        drops,
-      },
-      deposit: "0",
-      gas,
-    });
-  }
 
   console.log("Deployed.");
 }
@@ -566,7 +493,6 @@ export const addTickets = async ({
   signerAccount,
   funderAccountId,
   keypomAccountId,
-  marketplaceAccount,
   dropId,
   ticket,
   eventId,
@@ -575,7 +501,6 @@ export const addTickets = async ({
   signerAccount: any;
   funderAccountId: string;
   keypomAccountId: string;
-  marketplaceAccount: any;
   dropId: string;
   ticket: ZombieDropMetadata;
   eventId: string;
@@ -620,8 +545,9 @@ export const addTickets = async ({
         const randomIndex = Math.floor(
           Math.random() * questionResponses[question.question].length,
         );
-        answers[question.question] = `${questionResponses[question.question][randomIndex]
-          }`;
+        answers[question.question] = `${
+          questionResponses[question.question][randomIndex]
+        }`;
       }
     }
 
@@ -641,7 +567,7 @@ export const addTickets = async ({
 
   try {
     await sendTransaction({
-      signerAccount: marketplaceAccount,
+      signerAccount,
       receiverId: keypomAccountId,
       methodName: "add_keys",
       args: {
@@ -668,52 +594,54 @@ export const createSponsorAdmin = async ({
   let dashboardCsv: string[] = [];
 
   let keyPair = KeyPair.fromRandom("ed25519");
-  let accountId = 'sponsor1'
+  let accountId = "sponsor1";
   // Create admin and sponsor accounts
   await sendTransaction({
     signerAccount,
     receiverId,
     methodName: "internal_create_account",
     args: {
-      new_account_id: `${accountId}.${signerAccount.accountId}`,
+      new_account_id: `${accountId}.${receiverId}`,
       new_public_key: keyPair.publicKey.toString(),
       ticket_data: {
         starting_near_balance: utils.format.parseNearAmount("1"),
         starting_token_balance: utils.format.parseNearAmount("5000"),
-        account_type: "Sponsor"
-      }
+        account_type: "Sponsor",
+      },
     },
     deposit: "0",
     gas: "300000000000000",
   });
-  dashboardCsv.push(`${accountId}, /conference/dashboard/${accountId}.${signerAccount.accountId}#${keyPair.toString().replace(
-    "ed25519:",
-    "",
-  )}`);
+  dashboardCsv.push(
+    `${accountId}, /conference/dashboard/${accountId}.${receiverId}#${keyPair
+      .toString()
+      .replace("ed25519:", "")}`,
+  );
 
   keyPair = KeyPair.fromRandom("ed25519");
-  accountId = 'admin1'
+  accountId = "admin1";
   // Create admin and sponsor accounts
   await sendTransaction({
     signerAccount,
     receiverId,
     methodName: "internal_create_account",
     args: {
-      new_account_id: `${accountId}.${signerAccount.accountId}`,
+      new_account_id: `${accountId}.${receiverId}`,
       new_public_key: keyPair.publicKey.toString(),
       ticket_data: {
         starting_near_balance: utils.format.parseNearAmount("1"),
         starting_token_balance: utils.format.parseNearAmount("100000"),
-        account_type: "Admin"
-      }
+        account_type: "Admin",
+      },
     },
     deposit: "0",
     gas: "300000000000000",
   });
-  dashboardCsv.push(`${accountId}, /conference/dashboard/${accountId}.${signerAccount.accountId}#${keyPair.toString().replace(
-    "ed25519:",
-    "",
-  )}`);
+  dashboardCsv.push(
+    `${accountId}, /conference/dashboard/${accountId}.${receiverId}#${keyPair
+      .toString()
+      .replace("ed25519:", "")}`,
+  );
 
   const csvFilePath = path.join(__dirname, "admin_sponsor_data.csv");
   fs.writeFileSync(csvFilePath, dashboardCsv.join("\n"));
