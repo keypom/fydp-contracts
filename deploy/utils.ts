@@ -164,8 +164,6 @@ export async function createContracts({
     args: {
       ticket_data,
       keypom_contract: keypomContractId,
-      token_name: "Consensus Token",
-      symbol: "DESK",
       admin: ["benjiman.testnet"],
     },
     deposit: "0",
@@ -599,7 +597,7 @@ export const createSponsorAdmin = async ({
   await sendTransaction({
     signerAccount,
     receiverId,
-    methodName: "internal_create_account",
+    methodName: "admin_create_account",
     args: {
       new_account_id: `${accountId}.${receiverId}`,
       new_public_key: keyPair.publicKey.toString(),
@@ -624,7 +622,7 @@ export const createSponsorAdmin = async ({
   await sendTransaction({
     signerAccount,
     receiverId,
-    methodName: "internal_create_account",
+    methodName: "admin_create_account",
     args: {
       new_account_id: `${accountId}.${receiverId}`,
       new_public_key: keyPair.publicKey.toString(),

@@ -190,10 +190,15 @@ const main = async () => {
 
   let allKeyData: { [key: string]: string[] } = {};
   let eventIds: string[] = [];
+  const csvData: string[] = [];
   for (const curTicket of allTickets) {
     try {
       const { dropId, eventId, ticket, eventQuestions } = curTicket;
       eventIds.push(eventId);
+
+      const csvRow = `${dropId}, http://localhost:3000/scan/event/${signerAccount.accountId}:${eventId}`;
+      csvData.push(csvRow);
+
       const keyPairs = await addTickets({
         signerAccount,
         funderAccountId: signerAccount.accountId,
@@ -211,7 +216,6 @@ const main = async () => {
   }
 
   // Write the key data to a CSV file
-  const csvData: string[] = [];
   for (const dropId in allKeyData) {
     for (const secretKey of allKeyData[dropId]) {
       const csvRow = `${dropId}, /tickets/ticket/${dropId}#${secretKey.replace(
@@ -226,6 +230,7 @@ const main = async () => {
   fs.writeFileSync(csvFilePath, csvData.join("\n"));
 
   console.log(`Key data written to ${csvFilePath}`);
+  console.log("SCANNING");
 };
 
 main().catch(console.error);
