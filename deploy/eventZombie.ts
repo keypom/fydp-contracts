@@ -9,7 +9,7 @@ import {
   addTickets,
   createAccount,
   createContracts,
-  createSponsorAdmin,
+  createSponsorAccounts,
   decryptPrivateKey,
   decryptWithPrivateKey,
   deriveKeyFromPassword,
@@ -54,7 +54,7 @@ const main = async () => {
 
   const marketAccount = await near.account(marketplaceContractId);
   const factoryAccount = await near.account(factoryContractId);
-  await createSponsorAdmin({
+  await createSponsorAccounts({
     signerAccount,
     receiverId: factoryAccount.accountId,
   });
@@ -218,7 +218,7 @@ const main = async () => {
   // Write the key data to a CSV file
   for (const dropId in allKeyData) {
     for (const secretKey of allKeyData[dropId]) {
-      const csvRow = `${dropId}, /tickets/ticket/${dropId}#${secretKey.replace(
+      const csvRow = `${dropId}, http://localhost:3000/tickets/ticket/${dropId}#${secretKey.replace(
         "ed25519:",
         "",
       )}`;

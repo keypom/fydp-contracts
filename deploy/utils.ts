@@ -139,17 +139,17 @@ export async function createContracts({
 
   let ticket_data: Record<string, any> = {};
   ticket_data["ga_pass"] = {
-    starting_near_balance: utils.format.parseNearAmount("1"),
+    starting_near_balance: utils.format.parseNearAmount("0.01"),
     starting_token_balance: utils.format.parseNearAmount("50"),
     account_type: "Basic",
   };
   ticket_data["sponsor_pass"] = {
-    starting_near_balance: utils.format.parseNearAmount("1"),
+    starting_near_balance: utils.format.parseNearAmount("0.01"),
     starting_token_balance: utils.format.parseNearAmount("5000"),
     account_type: "Sponsor",
   };
   ticket_data["admin_pass"] = {
-    starting_near_balance: utils.format.parseNearAmount("1"),
+    starting_near_balance: utils.format.parseNearAmount("0.01"),
     starting_token_balance: utils.format.parseNearAmount("100000"),
     account_type: "Admin",
   };
@@ -582,7 +582,7 @@ export const addTickets = async ({
   return [];
 };
 
-export const createSponsorAdmin = async ({
+export const createSponsorAccounts = async ({
   signerAccount,
   receiverId,
 }: {
@@ -602,7 +602,7 @@ export const createSponsorAdmin = async ({
       new_account_id: `${accountId}.${receiverId}`,
       new_public_key: keyPair.publicKey.toString(),
       ticket_data: {
-        starting_near_balance: utils.format.parseNearAmount("1"),
+        starting_near_balance: utils.format.parseNearAmount("0.01"),
         starting_token_balance: utils.format.parseNearAmount("5000"),
         account_type: "Sponsor",
       },
@@ -610,38 +610,17 @@ export const createSponsorAdmin = async ({
     deposit: "0",
     gas: "300000000000000",
   });
+  let connectionObject = JSON.stringify({
+    displayName: accountId,
+    accountId: receiverId,
+    walletId: "sweat-wallet",
+    secretKey: keyPair.toString()
+  })
   dashboardCsv.push(
-    `${accountId}, /conference/dashboard/${accountId}.${receiverId}#${keyPair
-      .toString()
-      .replace("ed25519:", "")}`,
+    `${accountId}, http://localhost:3000/dashboard?connection=${btoa(connectionObject)}`,
   );
 
-  keyPair = KeyPair.fromRandom("ed25519");
-  accountId = "admin1";
-  // Create admin and sponsor accounts
-  await sendTransaction({
-    signerAccount,
-    receiverId,
-    methodName: "admin_create_account",
-    args: {
-      new_account_id: `${accountId}.${receiverId}`,
-      new_public_key: keyPair.publicKey.toString(),
-      ticket_data: {
-        starting_near_balance: utils.format.parseNearAmount("1"),
-        starting_token_balance: utils.format.parseNearAmount("100000"),
-        account_type: "Admin",
-      },
-    },
-    deposit: "0",
-    gas: "300000000000000",
-  });
-  dashboardCsv.push(
-    `${accountId}, /conference/dashboard/${accountId}.${receiverId}#${keyPair
-      .toString()
-      .replace("ed25519:", "")}`,
-  );
-
-  const csvFilePath = path.join(__dirname, "admin_sponsor_data.csv");
+  const csvFilePath = path.join(__dirname, "sponsor_data.csv");
   fs.writeFileSync(csvFilePath, dashboardCsv.join("\n"));
 };
 
