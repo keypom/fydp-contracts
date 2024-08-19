@@ -592,7 +592,7 @@ export const createSponsorAccounts = async ({
   let dashboardCsv: string[] = [];
 
   let keyPair = KeyPair.fromRandom("ed25519");
-  let accountId = "sponsor1";
+  let accountId = "proximity";
   // Create admin and sponsor accounts
   await sendTransaction({
     signerAccount,

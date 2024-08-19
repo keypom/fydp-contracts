@@ -34,7 +34,7 @@ impl Keypom {
     ) {
         near_sdk::log!("Attemping to Transfer using Account ID: {}", account_id);
         near_sdk::log!(
-            "TOKENS_FOR_OWNER contains funder?: {:?}",
+            "nft_tokens_per_owner contains funder?: {:?}",
             self.tokens_per_owner
                 .contains_key(&AccountId::try_from("keypom.test.near".to_string()).unwrap())
         );
